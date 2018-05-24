@@ -1,0 +1,109 @@
+##
+# CAS Cloud Bus Configuration
+#
+spring:
+  cloud:
+    bus:
+      enabled: false
+##
+# CAS AspectJ 配置
+#
+  aop:
+    proxy-target-class: true
+    auto: true
+  http:
+    encoding:
+      charset: UTF-8
+      force: true
+      enabled: true
+##
+# CAS Thymeleaf View 配置
+#
+  thymeleaf:
+    mode: HTML
+    cache: true
+    encoding: UTF-8
+##
+# CAS Server Context 配置
+#
+server:
+  connection-timeout: 20000
+  context-path: /cas
+  port: 8080
+##
+# CAS Web Application Session 配置
+#
+  session:
+    tracking-modes: COOKIE
+    cookie:
+      http-only: true
+    timeout: 300
+  context-parameters:
+    isLog4jAutoInitializationDisabled: true
+  compression:
+    mime-types: application/javascript,application/json,application/xml,text/html,text/xml,text/plain
+    enabled: true
+  error:
+    include-stacktrace: ALWAYS
+##
+# 证书配置
+#
+security:
+  basic:
+    path: /cas/status/**
+    authorize-mode: role
+    enabled: false
+endpoints:
+  restart:
+    enabled: false
+  sensitive: true
+  shutdown:
+    enabled: false
+  enabled: false
+##
+# CAS 身份验证凭证
+#
+cas:
+  theme:
+    defaultThemeName: demo
+  serviceRegistry:
+    initFromJson: true
+    watcherEnabled: true
+    repeatInterval: 120000
+    startDelay: 15000
+    config:
+      location: classpath:/services
+  server:
+      name: https://localhost:8080
+      prefix: https://localhost:8080/cas
+  authn:
+    token:
+      crypto:
+        enabled: false
+        encryptionEnabled: false
+#        encryption:
+#          key: 2_hy5dP5aCw84m_PmzJDmx3LVF9UmUSnyRRQTy8clIQ
+#          keySize: 128
+#       signing:
+#         key: Q-wSm-EUN2qlxELt4oKLz1KjYhZn1xbIfwqy2g4s1qbjRRaNx84Hr1ZQBGiF5Cu_2NBpXLErQxY1uG1yC7jRuw
+#         keySize: 256
+#        alg: A128CBC-HS256
+  logout:
+    followServiceRedirects: true
+    redirectParameter: service
+    confirmLogout: false
+    removeDescendantTickets: false
+  tgc:
+    name: LH-TGC
+    secure: false
+  warningCookie:
+    secure: false
+logging:
+  config: classpath:log4j2.xml
+management:
+  security:
+    sessions: if_required
+    roles: ACTUATOR,ADMIN
+    enabled: true
+  context-path: /status
+  add-application-context-header: false

@@ -1,0 +1,13 @@
+{
+  "@class": "org.apereo.cas.services.RegexRegisteredService",
+  "serviceId" : "^(https|imaps|http)://.*",
+  "name": "demo",
+  "id": 1,
+  "description": "demo1 service",
+  "evaluationOrder": 1,
+  "theme":"demo",
+  "logoutUrl": "http://localhost:8080/sample/" ,
+  "attributeReleasePolicy" : {
+    "@class" : "org.apereo.cas.services.ReturnAllAttributeReleasePolicy"
+  }
+}
