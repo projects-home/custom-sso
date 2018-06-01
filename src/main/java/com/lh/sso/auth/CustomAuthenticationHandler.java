@@ -13,6 +13,7 @@ import org.apereo.cas.authentication.principal.PrincipalFactory;
 import org.apereo.cas.services.ServicesManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -32,6 +33,9 @@ import java.util.HashMap;
 @Component
 public class CustomAuthenticationHandler extends AbstractUsernamePasswordAuthenticationHandler {
 
+    @Value("${login.url}")
+    private String loginUrl;
+
     private static final Logger LOGGER = LoggerFactory.getLogger(CustomAuthenticationHandler.class);
 
     private RestTemplate restTemplate = new RestTemplate();
@@ -47,7 +51,7 @@ public class CustomAuthenticationHandler extends AbstractUsernamePasswordAuthent
         user.setPassword(Md5Encoder.encodePassword(credential.getPassword()));
         try {
             HttpEntity<User> req = new HttpEntity(user);
-            ResponseEntity<ResponseData<UserModel>> responseEntity = restTemplate.exchange("http://localhost:8082/user/login", HttpMethod.POST, req, new ParameterizedTypeReference<ResponseData<UserModel>>() {
+            ResponseEntity<ResponseData<UserModel>> responseEntity = restTemplate.exchange(loginUrl, HttpMethod.POST, req, new ParameterizedTypeReference<ResponseData<UserModel>>() {
             });
             if(HttpStatus.OK.equals(responseEntity.getStatusCode())){
                 ResponseData<UserModel> res = responseEntity.getBody();
