@@ -1,9 +1,8 @@
 package com.lh.sso.auth;
 
-import com.lh.sdk.utils.Md5Encoder;
 import com.lh.sdk.web.model.ResponseData;
+import com.lh.sso.rest.entity.SimpleEmpVo;
 import com.lh.sso.rest.entity.User;
-import com.lh.sso.rest.entity.UserModel;
 import org.apereo.cas.authentication.AuthenticationException;
 import org.apereo.cas.authentication.HandlerResult;
 import org.apereo.cas.authentication.PreventedException;
@@ -48,15 +47,15 @@ public class CustomAuthenticationHandler extends AbstractUsernamePasswordAuthent
     protected HandlerResult authenticateUsernamePasswordInternal(UsernamePasswordCredential credential, String originPassword) throws GeneralSecurityException, PreventedException {
         User user = new User();
         user.setUsername(credential.getUsername());
-        user.setPassword(Md5Encoder.encodePassword(credential.getPassword()));
+        user.setPassword(credential.getPassword());
         try {
             HttpEntity<User> req = new HttpEntity(user);
-            ResponseEntity<ResponseData<UserModel>> responseEntity = restTemplate.exchange(loginUrl, HttpMethod.POST, req, new ParameterizedTypeReference<ResponseData<UserModel>>() {
+            ResponseEntity<ResponseData<SimpleEmpVo>> responseEntity = restTemplate.exchange(loginUrl, HttpMethod.POST, req, new ParameterizedTypeReference<ResponseData<SimpleEmpVo>>() {
             });
             if(HttpStatus.OK.equals(responseEntity.getStatusCode())){
-                ResponseData<UserModel> res = responseEntity.getBody();
+                ResponseData<SimpleEmpVo> res = responseEntity.getBody();
                 if(ResponseData.AJAX_STATUS_SUCCESS.equals(res.getStatusCode())){
-                    UserModel userModel = res.getData();
+                    SimpleEmpVo userModel = res.getData();
                     Field[] fields = userModel.getClass().getDeclaredFields();
                     HashMap<String, Object> principalMap = new HashMap<>();
                     for(Field field:fields){
