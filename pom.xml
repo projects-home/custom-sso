@@ -81,6 +81,16 @@
     </dependency>
     <dependency>
       <groupId>org.apereo.cas</groupId>
+      <artifactId>cas-server-support-token-core</artifactId>
+      <version>${cas.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.jasig.cas.client</groupId>
+      <artifactId>cas-client-core</artifactId>
+      <version>3.4.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apereo.cas</groupId>
       <artifactId>cas-server-documentation-swagger</artifactId>
       <version>${cas.version}</version>
     </dependency>

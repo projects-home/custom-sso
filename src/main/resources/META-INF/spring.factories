@@ -1,2 +1,3 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.lh.sso.CustomAuthenticationEventExecutionPlanConfiguration,\
-com.lh.sso.WebConfig
+com.lh.sso.WebConfig,\
+com.lh.sso.token.CustomTokenCoreConfiguration
