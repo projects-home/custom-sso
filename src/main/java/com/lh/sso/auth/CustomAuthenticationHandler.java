@@ -1,7 +1,7 @@
 package com.lh.sso.auth;
 
+import com.lh.common.sysmanager.SimpleEmpVo;
 import com.lh.sdk.web.model.ResponseData;
-import com.lh.sso.rest.entity.SimpleEmpVo;
 import com.lh.sso.rest.entity.User;
 import org.apereo.cas.authentication.AuthenticationException;
 import org.apereo.cas.authentication.HandlerResult;
