@@ -33,6 +33,6 @@ public class PlainJwt {
 
 
     public String serialize() {
-        return String.format("%s.%s", Base64.getUrlEncoder().encodeToString(JSON.toJSONString(this.header).getBytes(Charset.forName("utf-8"))), Base64.getUrlEncoder().encodeToString(JSON.toJSONString(this.payload).getBytes(Charset.forName("utf-8"))));
+        return String.format("%s.%s", Base64.getEncoder().encodeToString(JSON.toJSONString(this.header).getBytes(Charset.forName("utf-8"))), Base64.getEncoder().encodeToString(JSON.toJSONString(this.payload).getBytes(Charset.forName("utf-8"))));
     }
 }
