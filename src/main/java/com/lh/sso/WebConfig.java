@@ -1,5 +1,6 @@
 package com.lh.sso;
 
+import com.lh.sso.aop.RestResponseAspect;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
@@ -33,6 +34,11 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", buildConfig());
         return new CorsFilter(source);
+    }
+
+    @Bean
+    public RestResponseAspect responseAspect(){
+        return new RestResponseAspect();
     }
 
 }

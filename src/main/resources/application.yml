@@ -68,6 +68,9 @@ endpoints:
 cas:
   theme:
     defaultThemeName: demo
+  locale:
+    paramName: locale
+    defaultValue: zh_CN
   serviceRegistry:
     initFromJson: true
     watcherEnabled: true
