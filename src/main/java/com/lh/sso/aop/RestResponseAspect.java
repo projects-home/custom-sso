@@ -2,13 +2,13 @@ package com.lh.sso.aop;
 
 import com.alibaba.fastjson.JSON;
 import com.lh.sdk.web.model.ResponseData;
+import com.lh.sso.constant.Constant;
 import org.apereo.cas.CentralAuthenticationService;
 import org.apereo.cas.authentication.AuthenticationException;
 import org.apereo.cas.authentication.AuthenticationResult;
 import org.apereo.cas.authentication.AuthenticationSystemSupport;
 import org.apereo.cas.authentication.Credential;
 import org.apereo.cas.authentication.exceptions.AccountDisabledException;
-import org.apereo.cas.authentication.exceptions.AccountPasswordMustChangeException;
 import org.apereo.cas.authentication.principal.Service;
 import org.apereo.cas.authentication.principal.ServiceFactory;
 import org.apereo.cas.support.rest.BadRequestException;
@@ -30,6 +30,7 @@ import org.springframework.util.MultiValueMap;
 
 import javax.security.auth.login.AccountNotFoundException;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 /**
  * @author wangyongxin
@@ -92,9 +93,6 @@ public class RestResponseAspect {
         }else if(AccountDisabledException.class.equals(aClass)) {
             statusCode = "5";
             statusInfo = "账户已禁用";
-        }else if(AccountPasswordMustChangeException.class.equals(aClass)){
-            statusCode = "7";
-            statusInfo = "您的密码是初始化密码，请您修改密码";
         } else {
             statusInfo = "登录失败，请联系管理员";
         }
@@ -112,7 +110,13 @@ public class RestResponseAspect {
 
     protected ResponseEntity<String> createResponseEntityForTicket(final HttpServletRequest request,
                                                                    final TicketGrantingTicket tgtId) throws Exception {
-        return this.ticketGrantingTicketResourceEntityResponseFactory.build(tgtId, request);
+        Map<String, Object> attributes = tgtId.getAuthentication().getAttributes();
+        String userStatus = (String) attributes.get(Constant.USER_STATUS_KEY);
+        if(Constant.NEED_CHANGE_PASSWORD_FLAG.equals(userStatus)){
+            return new ResponseEntity<>(JSON.toJSONString(new ResponseData<>(userStatus,"您的密码是初始化密码，请您修改密码",attributes.get(Constant.USER_ID_KEY))), HttpStatus.UNAUTHORIZED);
+        } else {
+            return this.ticketGrantingTicketResourceEntityResponseFactory.build(tgtId, request);
+        }
     }
 
 }

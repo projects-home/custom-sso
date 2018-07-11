@@ -2,13 +2,13 @@ package com.lh.sso.auth;
 
 import com.lh.common.sysmanager.SimpleEmpVo;
 import com.lh.sdk.web.model.ResponseData;
+import com.lh.sso.constant.Constant;
 import com.lh.sso.rest.entity.User;
 import org.apereo.cas.authentication.AuthenticationException;
 import org.apereo.cas.authentication.HandlerResult;
 import org.apereo.cas.authentication.PreventedException;
 import org.apereo.cas.authentication.UsernamePasswordCredential;
 import org.apereo.cas.authentication.exceptions.AccountDisabledException;
-import org.apereo.cas.authentication.exceptions.AccountPasswordMustChangeException;
 import org.apereo.cas.authentication.handler.support.AbstractUsernamePasswordAuthenticationHandler;
 import org.apereo.cas.authentication.principal.PrincipalFactory;
 import org.apereo.cas.services.ServicesManager;
@@ -56,7 +56,7 @@ public class CustomAuthenticationHandler extends AbstractUsernamePasswordAuthent
         });
         if(HttpStatus.OK.equals(responseEntity.getStatusCode())){
             ResponseData<SimpleEmpVo> res = responseEntity.getBody();
-            if(ResponseData.AJAX_STATUS_SUCCESS.equals(res.getStatusCode())){
+            if(ResponseData.AJAX_STATUS_SUCCESS.equals(res.getStatusCode())||"7".equals(res.getStatusCode())){
                 try {
                     SimpleEmpVo userModel = res.getData();
                     Field[] fields = userModel.getClass().getDeclaredFields();
@@ -65,6 +65,7 @@ public class CustomAuthenticationHandler extends AbstractUsernamePasswordAuthent
                         field.setAccessible(true);
                         principalMap.put(field.getName(),field.get(userModel));
                     }
+                    principalMap.put(Constant.USER_STATUS_KEY,res.getStatusCode());
                     return createHandlerResult(credential,this.principalFactory.createPrincipal(credential.getUsername(),principalMap),null);
                 } catch (IllegalAccessException e) {
                     LOGGER.error("登录认证过程异常",e);
@@ -79,8 +80,6 @@ public class CustomAuthenticationHandler extends AbstractUsernamePasswordAuthent
                         throw new AccountDisabledException("账户已禁用");
                     case "6":
                         throw new AccountDisabledException("账户已禁用");
-                    case "7":
-                        throw new AccountPasswordMustChangeException("您的密码是初始化密码，请您修改密码");
                     default:
                         throw new AuthenticationException(res.getStatusInfo());
                 }
