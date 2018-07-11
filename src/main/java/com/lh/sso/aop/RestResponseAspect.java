@@ -27,6 +27,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.util.MultiValueMap;
+import org.springframework.util.StringUtils;
 
 import javax.security.auth.login.AccountNotFoundException;
 import javax.servlet.http.HttpServletRequest;
@@ -110,7 +111,7 @@ public class RestResponseAspect {
 
     protected ResponseEntity<String> createResponseEntityForTicket(final HttpServletRequest request,
                                                                    final TicketGrantingTicket tgtId) throws Exception {
-        Map<String, Object> attributes = tgtId.getAuthentication().getAttributes();
+        Map<String, Object> attributes = tgtId.getAuthentication().getPrincipal().getAttributes();
         String userStatus = (String) attributes.get(Constant.USER_STATUS_KEY);
         if(Constant.NEED_CHANGE_PASSWORD_FLAG.equals(userStatus)){
             this.centralAuthenticationService.destroyTicketGrantingTicket(tgtId.getId());

@@ -56,7 +56,7 @@ public class CustomAuthenticationHandler extends AbstractUsernamePasswordAuthent
         });
         if(HttpStatus.OK.equals(responseEntity.getStatusCode())){
             ResponseData<SimpleEmpVo> res = responseEntity.getBody();
-            if(ResponseData.AJAX_STATUS_SUCCESS.equals(res.getStatusCode())||"7".equals(res.getStatusCode())){
+            if(ResponseData.AJAX_STATUS_SUCCESS.equals(res.getStatusCode())||Constant.NEED_CHANGE_PASSWORD_FLAG.equals(res.getStatusCode())){
                 try {
                     SimpleEmpVo userModel = res.getData();
                     Field[] fields = userModel.getClass().getDeclaredFields();
