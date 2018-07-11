@@ -113,6 +113,7 @@ public class RestResponseAspect {
         Map<String, Object> attributes = tgtId.getAuthentication().getAttributes();
         String userStatus = (String) attributes.get(Constant.USER_STATUS_KEY);
         if(Constant.NEED_CHANGE_PASSWORD_FLAG.equals(userStatus)){
+            this.centralAuthenticationService.destroyTicketGrantingTicket(tgtId.getId());
             return new ResponseEntity<>(JSON.toJSONString(new ResponseData<>(userStatus,"您的密码是初始化密码，请您修改密码",attributes.get(Constant.USER_ID_KEY))), HttpStatus.UNAUTHORIZED);
         } else {
             return this.ticketGrantingTicketResourceEntityResponseFactory.build(tgtId, request);
